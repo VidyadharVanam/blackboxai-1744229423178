@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products | AgroTech</title>
+    <!-- Shared resources -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-white">
+    <!-- Header (same as index.html) -->
+    <header class="sticky top-0 z-50 glass-effect py-4 px-6 shadow-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-leaf text-3xl text-[#009E60] mr-2"></i>
+                <h1 class="text-2xl font-bold text-gray-800">AgroTech</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-[#009E60] transition">Home</a>
+                <a href="products.html" class="text-[#009E60] font-medium">Products</a>
+                <a href="#" class="text-gray-700 hover:text-[#009E60] transition">About</a>
+                <a href="#" class="text-gray-700 hover:text-[#009E60] transition">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-search text-gray-600 cursor-pointer hover:text-[#009E60]"></i>
+                <i class="fas fa-shopping-cart text-gray-600 cursor-pointer hover:text-[#009E60]"></i>
+                <i class="fas fa-user text-gray-600 cursor-pointer hover:text-[#009E60]"></i>
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-gray-600"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Grid Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row gap-8">
+            <!-- Filters Sidebar -->
+            <div class="w-full md:w-64 bg-white p-4 rounded-xl shadow-sm sticky top-32 h-fit">
+                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Filters</h2>
+                
+                <!-- Price Range Filter -->
+                <div class="mb-8">
+                    <h3 class="font-medium text-gray-700 mb-3">Price Range</h3>
+                    <input type="range" min="0" max="200" value="200" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="priceRange">
+                    <div class="flex justify-between text-sm text-gray-500 mt-2">
+                        <span>$0</span>
+                        <span id="maxPrice">$200+</span>
+                    </div>
+                </div>
+
+                <!-- Size Filter -->
+                <div class="mb-8">
+                    <h3 class="font-medium text-gray-700 mb-3">Size</h3>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button class="size-filter-btn py-2 px-3 border rounded-lg text-sm hover:bg-[#009E60] hover:text-white transition" data-size="small">Small</button>
+                        <button class="size-filter-btn py-2 px-3 border rounded-lg text-sm hover:bg-[#009E60] hover:text-white transition" data-size="medium">Medium</button>
+                        <button class="size-filter-btn py-2 px-3 border rounded-lg text-sm hover:bg-[#009E60] hover:text-white transition" data-size="large">Large</button>
+                        <button class="size-filter-btn py-2 px-3 border rounded-lg text-sm hover:bg-[#009E60] hover:text-white transition" data-size="xl">XL</button>
+                        <button class="size-filter-btn py-2 px-3 border rounded-lg text-sm hover:bg-[#009E60] hover:text-white transition" data-size="xxl">XXL</button>
+                    </div>
+                </div>
+
+                <!-- Apply Filters Button -->
+                <button id="applyFilters" class="w-full bg-[#009E60] text-white py-2 px-4 rounded-lg hover:bg-[#008552] transition">
+                    Apply Filters
+                </button>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1">
+            <script>
+            // Category filtering functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const filterButtons = document.querySelectorAll('.category-filter');
+                
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons
+                        filterButtons.forEach(btn => {
+                            btn.classList.remove('active', 'bg-[#009E60]', 'text-white');
+                            btn.classList.add('bg-white', 'text-[#009E60]', 'border');
+                        });
+                        
+                        // Add active class to clicked button
+                        this.classList.add('active', 'bg-[#009E60]', 'text-white');
+                        this.classList.remove('bg-white', 'text-[#009E60]', 'border');
+                        
+                        // Filter products
+                        const category = this.textContent.toLowerCase();
+                        const products = document.querySelectorAll('.product-card');
+                        
+                        products.forEach(product => {
+                            if (category === 'all' || product.dataset.category === category) {
+                                product.style.display = 'block';
+                            } else {
+                                product.style.display = 'none';
+                            }
+                        });
+                        
+                        // Scroll to section if not "All"
+                        if (category !== 'all') {
+                            const section = document.getElementById(`${category}-section`);
+                            if (section) {
+                                section.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                    });
+                });
+            });
+            </script>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Our Agriculture Products</h2>
+            
+            <!-- Section Anchors -->
+            <div class="hidden" id="seeds-section"></div>
+            <div class="hidden" id="tools-section"></div>
+            <div class="hidden" id="fertilizers-section"></div>
+            <div class="hidden" id="pesticides-section"></div>
+            
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="category-filter active bg-[#009E60] text-white px-6 py-2 rounded-full">All</button>
+                <a href="#seeds-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Seeds</a>
+                <a href="#tools-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Tools</a>
+                <a href="#fertilizers-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Fertilizers</a>
+                <a href="#pesticides-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Pesticides</a>
+            </div>
+
+            <!-- Seeds Products -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Wheat Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1600804340584-c7db2eacf0bf" alt="Wheat Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Premium Wheat Seeds</h3>
+                        <p class="text-gray-600 mt-2">High-yield winter wheat variety</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$12.99</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corn Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1518977676601-b53fccaba6b6" alt="Corn Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Hybrid Corn Seeds</h3>
+                        <p class="text-gray-600 mt-2">Drought-resistant with high starch content</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$15.99</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rice Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc" alt="Rice Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Basmati Rice Seeds</h3>
+                        <p class="text-gray-600 mt-2">Aromatic long-grain variety</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$14.50</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soybean Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1595231776511-0d0f5d9d8f0b" alt="Soybean Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Soybean Seeds</h3>
+                        <p class="text-gray-600 mt-2">High-protein, non-GMO</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$11.25</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional seed products (16 more) -->
+                <!-- Barley Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae" alt="Barley Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Barley Seeds</h3>
+                        <p class="text-gray-600 mt-2">For brewing and animal feed</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$10.75</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sunflower Seeds -->
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition" data-category="seeds">
+                    <img src="https://images.unsplash.com/photo-1597843786271-1027c561c6ff" alt="Sunflower Seeds" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">Sunflower Seeds</h3>
+                        <p class="text-gray-600 mt-2">Oil-rich variety</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-[#009E60] font-bold">$9.99</span>
+                            <button class="bg-[#009E60] text-white px-4 py-2 rounded-lg hover:bg-[#008552] transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional products would continue here -->
+                <!-- ... (14 more seed products with same structure) ... -->
+            </div>
+            
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="category-filter active bg-[#009E60] text-white px-6 py-2 rounded-full">All</button>
+                <a href="#seeds-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Seeds</a>
+                <a href="#tools-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Tools</a>
+                <a href="#fertilizers-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Fertilizers</a>
+                <a href="#pesticides-section" class="category-filter bg-white text-[#009E60] border border-[#009E60] px-6 py-2 rounded-full hover:bg-[#009E60]/10 transition">Pesticides</a>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-container">
+                <!-- Seeds Category -->
+                <div class="product-card seed-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Wheat+Seeds" alt="Wheat Seeds" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-[#009E60] text-white px-2 py-1 rounded-full text-xs font-medium">New</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Premium Wheat Seeds</h3>
+                        <p class="text-gray-600 mb-4">High-yield wheat variety with disease resistance</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$12.99</span>
+                            <a href="product-detail.html?id=1" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card seed-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Corn+Seeds" alt="Corn Seeds" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Hybrid Corn Seeds</h3>
+                        <p class="text-gray-600 mb-4">Fast-growing corn with high starch content</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$15.99</span>
+                            <a href="product-detail.html?id=2" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card seed-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Rice+Seeds" alt="Rice Seeds" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">Sale</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Aromatic Rice Seeds</h3>
+                        <p class="text-gray-600 mb-4">Premium basmati variety with long grains</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$18.99</span>
+                            <a href="product-detail.html?id=3" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card seed-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Tomato+Seeds" alt="Tomato Seeds" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Cherry Tomato Seeds</h3>
+                        <p class="text-gray-600 mb-4">Sweet and productive cherry tomatoes</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$9.99</span>
+                            <a href="product-detail.html?id=4" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card seed-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Sunflower+Seeds" alt="Sunflower Seeds" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Giant Sunflower Seeds</h3>
+                        <p class="text-gray-600 mb-4">Grows up to 12 feet tall with large blooms</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$7.99</span>
+                            <a href="product-detail.html?id=5" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Category -->
+                <div class="product-card tool-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Professional+Pruner" alt="Professional Pruner" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Professional Pruner</h3>
+                        <p class="text-gray-600 mb-4">Stainless steel blades with comfortable grip</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$24.99</span>
+                            <a href="product-detail.html?id=6" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card tool-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Garden+Hoe" alt="Garden Hoe" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Stainless Steel Hoe</h3>
+                        <p class="text-gray-600 mb-4">Durable weeding and soil preparation tool</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$19.99</span>
+                            <a href="product-detail.html?id=7" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card tool-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Watering+Can" alt="Watering Can" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-[#009E60] text-white px-2 py-1 rounded-full text-xs font-medium">New</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Galvanized Watering Can</h3>
+                        <p class="text-gray-600 mb-4">2-gallon capacity with removable rose</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$22.99</span>
+                            <a href="product-detail.html?id=8" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card tool-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Garden+Trowel" alt="Garden Trowel" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Ergonomic Garden Trowel</h3>
+                        <p class="text-gray-600 mb-4">Comfortable grip for planting and transplanting</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$14.99</span>
+                            <a href="product-detail.html?id=9" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card tool-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Wheelbarrow" alt="Wheelbarrow" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Heavy-Duty Wheelbarrow</h3>
+                        <p class="text-gray-600 mb-4">4 cubic feet capacity with puncture-proof tire</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$89.99</span>
+                            <a href="product-detail.html?id=10" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fertilizers Category -->
+                <div class="product-card fertilizer-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Organic+Fertilizer" alt="Organic Fertilizer" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">Sale</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Organic Fertilizer</h3>
+                        <p class="text-gray-600 mb-4">100% natural plant nutrients for all crops</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$18.99</span>
+                            <a href="product-detail.html?id=11" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card fertilizer-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=NPK+Fertilizer" alt="NPK Fertilizer" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Balanced NPK Fertilizer</h3>
+                        <p class="text-gray-600 mb-4">10-10-10 formula for general plant nutrition</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$24.99</span>
+                            <a href="product-detail.html?id=12" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card fertilizer-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Compost" alt="Compost" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Premium Garden Compost</h3>
+                        <p class="text-gray-600 mb-4">Organic matter for soil improvement</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$12.99</span>
+                            <a href="product-detail.html?id=13" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card fertilizer-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Seaweed+Extract" alt="Seaweed Extract" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-[#009E60] text-white px-2 py-1 rounded-full text-xs font-medium">New</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Liquid Seaweed Extract</h3>
+                        <p class="text-gray-600 mb-4">Natural growth stimulant and stress reducer</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$16.99</span>
+                            <a href="product-detail.html?id=14" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card fertilizer-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Bone+Meal" alt="Bone Meal" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Organic Bone Meal</h3>
+                        <p class="text-gray-600 mb-4">High-phosphorus fertilizer for root development</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$14.99</span>
+                            <a href="product-detail.html?id=15" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pesticides Category -->
+                <div class="product-card pesticide-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Crop+Protection" alt="Crop Protection" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Crop Protection Spray</h3>
+                        <p class="text-gray-600 mb-4">Effective against common pests and diseases</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$15.99</span>
+                            <a href="product-detail.html?id=16" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card pesticide-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Neem+Oil" alt="Neem Oil" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Organic Neem Oil</h3>
+                        <p class="text-gray-600 mb-4">Natural pest control and fungicide</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$19.99</span>
+                            <a href="product-detail.html?id=17" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card pesticide-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Insecticidal+Soap" alt="Insecticidal Soap" class="h-48 w-48 object-contain">
+                        <div class="absolute top-4 right-4 bg-[#009E60] text-white px-2 py-1 rounded-full text-xs font-medium">New</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Insecticidal Soap</h3>
+                        <p class="text-gray-600 mb-4">Safe for organic gardening</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$12.99</span>
+                            <a href="product-detail.html?id=18" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card pesticide-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Fungicide" alt="Fungicide" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Copper Fungicide</h3>
+                        <p class="text-gray-600 mb-4">Controls fungal diseases on fruits and vegetables</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$16.99</span>
+                            <a href="product-detail.html?id=19" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card pesticide-category bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative h-64 bg-[#009E60]/10 flex items-center justify-center">
+                        <img src="https://via.placeholder.com/300x300?text=Slug+Bait" alt="Slug Bait" class="h-48 w-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Organic Slug Bait</h3>
+                        <p class="text-gray-600 mb-4">Iron phosphate formula safe for pets</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-[#009E60]">$14.99</span>
+                            <a href="product-detail.html?id=20" class="btn-primary text-white px-4 py-2 rounded-lg text-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Footer content same as index.html -->
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 AgroTech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Product filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.category-filter');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active', 'bg-[#009E60]', 'text-white'));
+                    filterButtons.forEach(btn => btn.classList.add('bg-white', 'text-[#009E60]', 'border'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active', 'bg-[#009E60]', 'text-white');
+                    this.classList.remove('bg-white', 'text-[#009E60]', 'border');
+                    
+                    // In a real implementation, you would filter products here
+                    console.log(`Filtering by: ${this.textContent.trim()}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
